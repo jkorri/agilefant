@@ -20,8 +20,7 @@ public class BacklogHourEntryDAOHibernate extends GenericDAOHibernate<BacklogHou
     
     @SuppressWarnings("unchecked")
     public List<BacklogHourEntry> retrieveByBacklog(Backlog target) {
-        DetachedCriteria criteria = DetachedCriteria.forClass(this
-                .getPersistentClass());
+        DetachedCriteria criteria = this.createDetachedCriteria();
         criteria.add(Restrictions.eq("backlog", target));
         
         return (List<BacklogHourEntry>) hibernateTemplate

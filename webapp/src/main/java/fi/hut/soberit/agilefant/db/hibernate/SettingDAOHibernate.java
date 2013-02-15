@@ -21,8 +21,7 @@ public class SettingDAOHibernate extends GenericDAOHibernate<Setting> implements
          */
         @SuppressWarnings("unchecked")
         public Setting getByName(String name) {
-            DetachedCriteria criteria = DetachedCriteria.forClass(this
-                    .getPersistentClass());
+            DetachedCriteria criteria = this.createDetachedCriteria();
             criteria.add(Restrictions.eq("name", name));
             return super.getFirst(hibernateTemplate.findByCriteria(criteria));
         }

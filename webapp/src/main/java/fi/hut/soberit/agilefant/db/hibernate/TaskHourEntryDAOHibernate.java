@@ -20,8 +20,7 @@ public class TaskHourEntryDAOHibernate extends GenericDAOHibernate<TaskHourEntry
     
     @SuppressWarnings("unchecked")
     public List<TaskHourEntry> retrieveByTask(Task target) {
-        DetachedCriteria criteria = DetachedCriteria.forClass(this
-                .getPersistentClass());
+        DetachedCriteria criteria = this.createDetachedCriteria();
         criteria.add(Restrictions.eq("task", target));
         
         return (List<TaskHourEntry>) hibernateTemplate
