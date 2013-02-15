@@ -121,19 +121,19 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
         return list.iterator().next();
     }
 
-    protected DetachedCriteria createCriteria() {
+    protected DetachedCriteria createDetachedCriteria() {
         return DetachedCriteria.forClass(this.getPersistentClass());
     }
 
     public int count() {
-        DetachedCriteria criteria = createCriteria().setProjection(
+        DetachedCriteria criteria = createDetachedCriteria().setProjection(
                 Projections.rowCount());
         return ((Long) hibernateTemplate.findByCriteria(criteria).get(0))
                 .intValue();
     }
 
     public boolean exists(int id) {
-        DetachedCriteria crit = createCriteria().add(Restrictions.idEq(id))
+        DetachedCriteria crit = createDetachedCriteria().add(Restrictions.idEq(id))
                 .setProjection(Projections.rowCount());
         return ((Long) hibernateTemplate.findByCriteria(crit).get(0))
                 .intValue() > 0;
