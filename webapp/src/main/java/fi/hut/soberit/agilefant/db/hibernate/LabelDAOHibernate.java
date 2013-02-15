@@ -23,7 +23,7 @@ LabelDAO {
     }
 
     public boolean labelExists(String labelName, Story story) {
-        Criteria crit = getCurrentSession().createCriteria(Label.class);
+        Criteria crit = this.createCriteria(Label.class);
         crit.add(Restrictions.eq("story", story));
         crit.add(Restrictions.eq("name", labelName.toLowerCase()));
         crit.setProjection(Projections.projectionList().add(Projections.count("id")));
@@ -33,7 +33,7 @@ LabelDAO {
     }
     
     public List<Label> lookupLabelsLike(String labelName) {
-        Criteria crit = getCurrentSession().createCriteria(Label.class);
+        Criteria crit = this.createCriteria(Label.class);
         crit.add(Restrictions.like("name", labelName.toLowerCase() + "%"));
         crit.addOrder(Order.asc("name"));
         ProjectionList plist = Projections.projectionList();

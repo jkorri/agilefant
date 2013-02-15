@@ -81,7 +81,7 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
         if (ids == null || ids.isEmpty()) {
             return new HashSet<T>();
         }
-        Criteria c = getCurrentSession().createCriteria(getPersistentClass());
+        Criteria c = this.createCriteria(getPersistentClass());
         c.add(Restrictions.in("id", ids));
         return asCollection(c);
     }
@@ -125,6 +125,15 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
         return DetachedCriteria.forClass(this.getPersistentClass());
     }
 
+    protected Criteria createCriteria(Class clazz) {
+        return this.getCurrentSession().createCriteria(clazz);
+    }    
+
+    protected Criteria createCriteria(Class clazz, String alias) {
+        return this.getCurrentSession().createCriteria(clazz, alias);
+    }    
+    
+    
     public int count() {
         DetachedCriteria criteria = createDetachedCriteria().setProjection(
                 Projections.rowCount());

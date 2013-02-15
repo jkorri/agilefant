@@ -53,9 +53,8 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
      * {@inheritDoc}
      */
     public List<Story> retrieveProjectLeafStories(Project project) {
-        Criteria projectCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria iterationCrit = getCurrentSession()
-                .createCriteria(Story.class);
+        Criteria projectCrit = this.createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
         this.attachLeafFilters(projectCrit, iterationCrit, project);
         
         List<Story> projectLeaf = asList(projectCrit);
@@ -83,9 +82,8 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
      * {@inheritDoc}
      */
     public long totalLeafStoryPoints(Project project) {
-        Criteria projectCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria iterationCrit = getCurrentSession()
-                .createCriteria(Story.class);
+        Criteria projectCrit = this.createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
         this.attachLeafFilters(projectCrit, iterationCrit, project);
         
         iterationCrit.add(Restrictions.ne("state", StoryState.DEFERRED));
@@ -103,8 +101,7 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
      * {@inheritDoc}
      */
     public long totalLeafStoryPoints(Iteration iteration) {
-        Criteria iterationCrit = getCurrentSession()
-                .createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
         
         iterationCrit.add(Restrictions.isEmpty("children"));
         
@@ -120,9 +117,8 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
      * {@inheritDoc}
      */
     public long totalLeafDoneStoryPoints(Project project) {
-        Criteria projectCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria iterationCrit = getCurrentSession()
-                .createCriteria(Story.class);
+        Criteria projectCrit = this.createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
         this.attachLeafFilters(projectCrit, iterationCrit, project);
         projectCrit.setProjection(Projections.projectionList().add(
                 Projections.sum("storyPoints")));
@@ -138,8 +134,7 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
      * {@inheritDoc}
      */
     public long totalLeafDoneStoryPoints(Iteration iteration) {
-        Criteria iterationCrit = getCurrentSession()
-                .createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
         iterationCrit.add(Restrictions.isEmpty("children"));
         iterationCrit.setProjection(Projections.projectionList().add(
                 Projections.sum("storyPoints")));
@@ -197,9 +192,9 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
     @SuppressWarnings("unchecked")
     public List<Story> retrieveProjectRootStories(int projectId) {
 
-        Criteria projectCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria iterationCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria standaloneIterationCrit = getCurrentSession().createCriteria(Story.class);
+        Criteria projectCrit = this.createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
+        Criteria standaloneIterationCrit = this.createCriteria(Story.class);
         this.attachRootFilters(projectCrit, iterationCrit, standaloneIterationCrit, projectId);
         List<Story> directProjectRoots = asList(projectCrit);
         List<Story> iterationRoots = asList(iterationCrit);
@@ -219,9 +214,9 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
      * {@inheritDoc}
      */
     public long totalRootStoryPoints(Project project) {
-        Criteria projectCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria iterationCrit = getCurrentSession().createCriteria(Story.class);
-        Criteria standaloneIterationCrit = getCurrentSession().createCriteria(Story.class);
+        Criteria projectCrit = this.createCriteria(Story.class);
+        Criteria iterationCrit = this.createCriteria(Story.class);
+        Criteria standaloneIterationCrit = this.createCriteria(Story.class);
         this.attachRootFilters(projectCrit, iterationCrit, standaloneIterationCrit, project.getId());
         
         iterationCrit.add(Restrictions.ne("state", StoryState.DEFERRED));
@@ -273,7 +268,7 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
     }
      
     private Criteria getRootStoryCriteria(int productId) {
-        Criteria rootFilter = getCurrentSession().createCriteria(Story.class);
+        Criteria rootFilter = this.createCriteria(Story.class);
         rootFilter.createAlias(
                 "backlog.parent", "secondParent", CriteriaSpecification.LEFT_JOIN)
                 .createAlias("secondParent.parent", "thirdParent",

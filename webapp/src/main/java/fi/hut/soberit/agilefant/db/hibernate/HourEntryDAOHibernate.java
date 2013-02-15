@@ -33,7 +33,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     public long calculateSumByUserAndTimeInterval(int userId,
             DateTime startDate, DateTime endDate) {
-        Criteria crit = getCurrentSession().createCriteria(HourEntry.class);
+        Criteria crit = this.createCriteria(HourEntry.class);
         crit.createCriteria("user").add(Restrictions.idEq(userId));
         crit.add(Restrictions.between("date", startDate, endDate));
         crit.setProjection(Projections.sum("minutesSpent"));
@@ -45,7 +45,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     private long calculateHourSum(boolean task, int storyId) {
         Class<?> type = task ? TaskHourEntry.class : StoryHourEntry.class;
-        Criteria crit = getCurrentSession().createCriteria(type);
+        Criteria crit = this.createCriteria(type);
         crit.setProjection(Projections.sum("minutesSpent"));
         if (task)
             crit = crit.createCriteria("task");
@@ -64,7 +64,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     public long calculateSumFromTasksWithoutStory(int iterationId) {
-        Criteria crit = getCurrentSession().createCriteria(TaskHourEntry.class);
+        Criteria crit = this.createCriteria(TaskHourEntry.class);
         crit.setProjection(Projections.sum("minutesSpent"));
         Criteria taskCrit = crit.createCriteria("task");
         taskCrit.add(Restrictions.isNull("story"));
@@ -96,8 +96,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
         if (backlogIds == null || backlogIds.size() == 0) {
             return Collections.emptyList();
         }
-        Criteria crit = getCurrentSession().createCriteria(
-                BacklogHourEntry.class);
+        Criteria crit = this.createCriteria(BacklogHourEntry.class);
         crit.createAlias("backlog", "bl", CriteriaSpecification.LEFT_JOIN);
         crit.createAlias("backlog.parent", "blParent",
                 CriteriaSpecification.LEFT_JOIN);
@@ -118,8 +117,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
             return Collections.emptyList();
         }
 
-        Criteria crit = getCurrentSession()
-                .createCriteria(StoryHourEntry.class);
+        Criteria crit = this.createCriteria(StoryHourEntry.class);
         crit.createAlias("story.iteration", "iteration",
                 CriteriaSpecification.LEFT_JOIN);
         crit.createAlias("story.backlog", "backlog",
@@ -142,7 +140,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
             return Collections.emptyList();
         }
 
-        Criteria crit = getCurrentSession().createCriteria(TaskHourEntry.class);
+        Criteria crit = this.createCriteria(TaskHourEntry.class);
 
         String[] backlogs = { "iteration", "backlog", "backlogParent",
                 "task_without_story_iteration", "task_without_story_project",
@@ -187,8 +185,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     private List<HourEntry> getHourEntriesForTaskWithoutStoryForIteration(
             int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                TaskHourEntry.class);
+        Criteria criteria = this.createCriteria(TaskHourEntry.class);
 
         criteria = criteria.createCriteria("task");
         criteria.add(Restrictions.isNull("story"));
@@ -200,8 +197,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     private long getSumForTaskHourEntriesWithoutStoryForIteration(
             int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                TaskHourEntry.class);
+        Criteria criteria = this.createCriteria(TaskHourEntry.class);
 
         criteria.setProjection(Projections.sum("minutesSpent"));
 
@@ -220,8 +216,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     private List<HourEntry> getHourEntriesForTaskWithStoryForIteration(
             int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                TaskHourEntry.class);
+        Criteria criteria = this.createCriteria(TaskHourEntry.class);
 
         criteria = criteria.createCriteria("task");
         criteria.add(Restrictions.isNotNull("story"));
@@ -233,8 +228,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     private long getSumForTaskHourEntriesWithStoryForIteration(int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                TaskHourEntry.class);
+        Criteria criteria = this.createCriteria(TaskHourEntry.class);
 
         criteria.setProjection(Projections.sum("minutesSpent"));
 
@@ -253,8 +247,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     private List<HourEntry> getHourEntriesForStoryForIteration(int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                StoryHourEntry.class);
+        Criteria criteria = this.createCriteria(StoryHourEntry.class);
 
         criteria = criteria.createCriteria("story");
         criteria = criteria.createCriteria("iteration");
@@ -264,8 +257,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     private long getSumForStoryHourEntriesForIteration(int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                StoryHourEntry.class);
+        Criteria criteria = this.createCriteria(StoryHourEntry.class);
 
         criteria.setProjection(Projections.sum("minutesSpent"));
 
@@ -282,8 +274,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     private long getSumForBacklogHourEntriesForIteration(int iterationId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                BacklogHourEntry.class);
+        Criteria criteria = this.createCriteria(BacklogHourEntry.class);
 
         criteria.setProjection(Projections.sum("minutesSpent"));
 
@@ -310,8 +301,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     public List<HourEntry> getHourEntriesByFilter(DateTime startTime,
             DateTime endTime, int userId) {
-        Criteria crit = this.getCurrentSession()
-                .createCriteria(HourEntry.class);
+        Criteria crit = this.createCriteria(HourEntry.class);
         if (startTime != null) {
             crit.add(Restrictions.ge("date", startTime));
         }
@@ -336,8 +326,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     public List<HourEntry> getBacklogHourEntries(int backlogId, int limit) {
-        Criteria crit = getCurrentSession().createCriteria(
-                BacklogHourEntry.class);
+        Criteria crit = this.createCriteria(BacklogHourEntry.class);
         crit.add(Restrictions.eq("backlog.id", backlogId));
         crit.addOrder(Order.desc("date"));
         if (limit > 0) {
@@ -347,7 +336,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     public List<HourEntry> getTaskHourEntries(int taskId, int limit) {
-        Criteria crit = getCurrentSession().createCriteria(TaskHourEntry.class);
+        Criteria crit = this.createCriteria(TaskHourEntry.class);
         crit.add(Restrictions.eq("task.id", taskId));
         crit.addOrder(Order.desc("date"));
         if (limit > 0) {
@@ -357,8 +346,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
     }
 
     public List<HourEntry> getStoryHourEntries(int storyId, int limit) {
-        Criteria crit = getCurrentSession()
-                .createCriteria(StoryHourEntry.class);
+        Criteria crit = this.createCriteria(StoryHourEntry.class);
         crit.add(Restrictions.eq("story.id", storyId));
         crit.addOrder(Order.desc("date"));
         if (limit > 0) {
@@ -369,7 +357,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     public List<HourEntry> retrieveByUserAndInterval(User user,
             Interval interval) {
-        Criteria crit = getCurrentSession().createCriteria(HourEntry.class);
+        Criteria crit = this.createCriteria(HourEntry.class);
         crit.add(Restrictions.eq("user", user));
         crit.add(Restrictions.between("date", interval.getStart(),
                 interval.getEnd()));
@@ -379,7 +367,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
 
     @Override
     public long retrieveLatestHourEntryDelta(int userId) {
-        Criteria crit = getCurrentSession().createCriteria(HourEntry.class);
+        Criteria crit = this.createCriteria(HourEntry.class);
         crit.add(Restrictions.eq("user.id", userId));
         crit.addOrder(Order.desc("date"));
         crit.setMaxResults(1);

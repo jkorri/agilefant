@@ -29,7 +29,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
 
     /** {@inheritDoc} */
     public int getNumberOfChildren(Backlog backlog) {
-        Criteria criteria = getCurrentSession().createCriteria(Backlog.class);
+        Criteria criteria = this.createCriteria(Backlog.class);
         criteria.add(Restrictions.idEq(backlog.getId()));
         criteria.createCriteria("children");
         criteria.setProjection(Projections.rowCount());
@@ -44,7 +44,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
     }
 
     public int calculateStoryPointSum(int iterationId) {
-        Criteria crit = getCurrentSession().createCriteria(Story.class);
+        Criteria crit = this.createCriteria(Story.class);
         crit.setProjection(Projections.sum("storyPoints"));
         crit.createCriteria("iteration").add(Restrictions.idEq(iterationId));
         Long result = uniqueResult(crit);
@@ -53,7 +53,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
     }
     
     public int calculateDoneStoryPointSum(int iterationId) {
-        Criteria crit = getCurrentSession().createCriteria(Story.class);
+        Criteria crit = this.createCriteria(Story.class);
         crit.setProjection(Projections.sum("storyPoints"));
         crit.createCriteria("iteration").add(Restrictions.idEq(iterationId));
         crit.add(Restrictions.eq("state", StoryState.DONE));
@@ -68,7 +68,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
     }
     
     public List<Backlog> searchByName(String name, Class<?> type) {
-        Criteria crit = getCurrentSession().createCriteria(type);
+        Criteria crit = this.createCriteria(type);
         crit.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
         crit.addOrder(Order.asc("class"));
         crit.addOrder(Order.asc("name"));
@@ -77,7 +77,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
     }
     
     public Collection<Backlog> retrieveStandaloneIterations() {
-        Criteria crit = getCurrentSession().createCriteria(Backlog.class);
+        Criteria crit = this.createCriteria(Backlog.class);
         crit.add(Restrictions.sqlRestriction("{alias}.parent_id is NULL"));
         crit.add(Restrictions.sqlRestriction("{alias}.backlogType like 'Iteration'"));
         crit.setMaxResults(SearchBusiness.MAX_RESULTS_PER_TYPE);

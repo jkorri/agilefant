@@ -38,7 +38,7 @@ public class ProductDAOHibernate extends GenericDAOHibernate<Product> implements
     }
     
     public List<Product> retrieveBacklogTree() {
-        Criteria crit = this.getCurrentSession().createCriteria(this.getPersistentClass());
+        Criteria crit = this.createCriteria(this.getPersistentClass());
         crit.createAlias("children", "projects", CriteriaSpecification.LEFT_JOIN);
         crit.createAlias("projects.children", "iterations", CriteriaSpecification.LEFT_JOIN);
         crit.addOrder(Order.asc("name"));
@@ -49,7 +49,7 @@ public class ProductDAOHibernate extends GenericDAOHibernate<Product> implements
     public List<Story> retrieveLeafStories(Product product) {
         int productId = product.getId();
         
-        Criteria leaftStoryCrit = getCurrentSession().createCriteria(Story.class);
+        Criteria leaftStoryCrit = this.createCriteria(Story.class);
         leaftStoryCrit.createAlias(
                 "backlog.parent", "secondParent", CriteriaSpecification.LEFT_JOIN)
                 .createAlias("secondParent.parent", "thirdParent",
@@ -63,8 +63,8 @@ public class ProductDAOHibernate extends GenericDAOHibernate<Product> implements
     }
 
     public Pair<DateTime, DateTime> retrieveScheduleStartAndEnd(Product product) {
-        Criteria iterations = getCurrentSession().createCriteria(Iteration.class);
-        Criteria projects = getCurrentSession().createCriteria(Project.class);
+        Criteria iterations = this.createCriteria(Iteration.class);
+        Criteria projects = this.createCriteria(Project.class);
         
         iterations.createCriteria("parent").add(Restrictions.eq("parent", product));
         

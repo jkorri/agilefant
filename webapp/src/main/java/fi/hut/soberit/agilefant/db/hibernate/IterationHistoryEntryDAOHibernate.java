@@ -32,8 +32,7 @@ public class IterationHistoryEntryDAOHibernate extends
     }
 
     private IterationHistoryEntry retrieveByDateInternal(int iterationId, LocalDate timestamp) {
-        Criteria crit = getCurrentSession().createCriteria(
-                IterationHistoryEntry.class);
+        Criteria crit = this.createCriteria(IterationHistoryEntry.class);
         crit.setMaxResults(1);
         if (timestamp != null) {
             crit.add(Restrictions.le("timestamp", timestamp));
@@ -63,7 +62,7 @@ public class IterationHistoryEntryDAOHibernate extends
     }
     
     private Pair<ExactEstimate, ExactEstimate> calculateCurrentHistoryData_tasksWithoutStory(int iterationId) {
-        Criteria crit = getCurrentSession().createCriteria(Task.class);
+        Criteria crit = this.createCriteria(Task.class);
         crit.add(Restrictions.eq("iteration.id", iterationId));
         crit.add(Restrictions.ne("state", TaskState.DEFERRED));
         crit.setProjection(Projections.projectionList().add(
@@ -75,7 +74,7 @@ public class IterationHistoryEntryDAOHibernate extends
     }
     
     private Pair<ExactEstimate, ExactEstimate> calculateCurrentHistoryData_tasksInsideStory(int iterationId) {
-        Criteria crit = getCurrentSession().createCriteria(Task.class);
+        Criteria crit = this.createCriteria(Task.class);
         
         crit.setProjection(Projections.projectionList().add(
                 Projections.sum("effortLeft")).add(
@@ -109,7 +108,7 @@ public class IterationHistoryEntryDAOHibernate extends
     
     public List<IterationHistoryEntry> getHistoryEntriesForIteration(
             int iterationId) {
-        Criteria crit = getCurrentSession().createCriteria(IterationHistoryEntry.class);
+        Criteria crit = this.createCriteria(IterationHistoryEntry.class);
         crit.add(Restrictions.eq("iteration.id", iterationId));
         crit.addOrder(Order.asc("timestamp"));
         return asList(crit);
