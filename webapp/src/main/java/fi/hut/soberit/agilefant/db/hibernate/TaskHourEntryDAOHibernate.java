@@ -3,7 +3,6 @@ package fi.hut.soberit.agilefant.db.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
