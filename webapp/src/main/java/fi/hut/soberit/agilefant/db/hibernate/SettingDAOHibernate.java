@@ -1,8 +1,10 @@
 package fi.hut.soberit.agilefant.db.hibernate;
 
+import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -21,9 +23,9 @@ public class SettingDAOHibernate extends GenericDAOHibernate<Setting> implements
          */
         @SuppressWarnings("unchecked")
         public Setting getByName(String name) {
-            DetachedCriteria criteria = this.createDetachedCriteria();
-            criteria.add(Restrictions.eq("name", name));
-            return super.getFirst(hibernateTemplate.findByCriteria(criteria));
+        	Criteria criteria = this.createCriteria(this.getPersistentClass());
+        	criteria.add(Restrictions.eq("name", name));
+        	return super.getFirst(criteria.list());
         }
        
         /**
@@ -31,7 +33,13 @@ public class SettingDAOHibernate extends GenericDAOHibernate<Setting> implements
          */
         @SuppressWarnings("unchecked")
         public List<Setting> getAllOrderByName(){
-            final String query = "from Setting s order by s.name asc";
-            return (List<Setting>) hibernateTemplate.find(query);
+        	Criteria criteria = this.createCriteria(this.getPersistentClass());
+        	criteria.addOrder(Order.asc("name"));
+        	return criteria.list();
         }
+
+		@Override
+		public Collection<Setting> getAll() {
+			return this.hibernateTemplate.loadAll(getPersistentClass());
+		}
 }

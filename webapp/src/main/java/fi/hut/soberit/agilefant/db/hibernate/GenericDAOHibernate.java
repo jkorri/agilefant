@@ -61,7 +61,7 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
 
     /** {@inheritDoc} */
     public T get(int id) {
-        return hibernateTemplate.get(this.getPersistentClass(), id);
+    	return (T)this.getCurrentSession().get(getPersistentClass(), id);
     }
 
     /** {@inheritDoc} */
@@ -72,8 +72,9 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
     }
     
     /** {@inheritDoc} */
-    public List<T> getAll() {
-        return hibernateTemplate.loadAll(getPersistentClass());
+    @SuppressWarnings("unchecked")
+    public Collection<T> getAll() {
+    	return this.createCriteria(this.getPersistentClass()).list();
     }
     
     /** {@inheritDoc} */
@@ -93,17 +94,17 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
 
     /** {@inheritDoc} */
     public void remove(T object) {
-        hibernateTemplate.delete(object);
+    	this.getCurrentSession().delete(object);
     }
 
     /** {@inheritDoc} */
     public void store(T object) {
-        hibernateTemplate.saveOrUpdate(object);
+    	this.getCurrentSession().saveOrUpdate(object);
     }
 
     /** {@inheritDoc} */
     public Serializable create(T object) {
-        return hibernateTemplate.save(object);
+    	return this.getCurrentSession().save(object);
     }
 
     protected T getFirst(Collection<T> list) {
@@ -135,17 +136,15 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
     
     
     public int count() {
-        DetachedCriteria criteria = createDetachedCriteria().setProjection(
-                Projections.rowCount());
-        return ((Long) hibernateTemplate.findByCriteria(criteria).get(0))
-                .intValue();
+    	Criteria criteria = this.createCriteria(this.getPersistentClass());
+    	criteria.setProjection(Projections.rowCount());
+    	return ((Long)criteria.uniqueResult()).intValue();
     }
 
     public boolean exists(int id) {
-        DetachedCriteria crit = createDetachedCriteria().add(Restrictions.idEq(id))
-                .setProjection(Projections.rowCount());
-        return ((Long) hibernateTemplate.findByCriteria(crit).get(0))
-                .intValue() > 0;
+    	Criteria criteria = this.createCriteria(this.getPersistentClass());
+        criteria.add(Restrictions.idEq(id)).setProjection(Projections.rowCount());
+        return ((Long)criteria.uniqueResult()).intValue() > 0;
     }
 
     public Session getCurrentSession() {

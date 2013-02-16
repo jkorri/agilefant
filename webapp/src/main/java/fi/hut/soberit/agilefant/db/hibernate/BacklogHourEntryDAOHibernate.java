@@ -2,6 +2,7 @@ package fi.hut.soberit.agilefant.db.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -20,11 +21,9 @@ public class BacklogHourEntryDAOHibernate extends GenericDAOHibernate<BacklogHou
     
     @SuppressWarnings("unchecked")
     public List<BacklogHourEntry> retrieveByBacklog(Backlog target) {
-        DetachedCriteria criteria = this.createDetachedCriteria();
-        criteria.add(Restrictions.eq("backlog", target));
-        
-        return (List<BacklogHourEntry>) hibernateTemplate
-                .findByCriteria(criteria);
+    	Criteria criteria = this.createCriteria(this.getPersistentClass());
+    	criteria.add(Restrictions.eq("backlog", target));
+    	return criteria.list();
     }
 
 }

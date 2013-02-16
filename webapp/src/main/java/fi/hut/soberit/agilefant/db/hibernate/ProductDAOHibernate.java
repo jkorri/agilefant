@@ -33,8 +33,9 @@ public class ProductDAOHibernate extends GenericDAOHibernate<Product> implements
 
     @SuppressWarnings("unchecked")
     public Collection<Product> getAllOrderByName() {
-        DetachedCriteria crit = createDetachedCriteria().addOrder(Order.asc("name"));
-        return hibernateTemplate.findByCriteria(crit);
+    	Criteria criteria = this.createCriteria(this.getPersistentClass());
+    	criteria.addOrder(Order.asc("name"));
+    	return criteria.list();    	
     }
     
     public List<Product> retrieveBacklogTree() {
