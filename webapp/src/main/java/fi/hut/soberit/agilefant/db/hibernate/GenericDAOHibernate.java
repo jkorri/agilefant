@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -174,4 +175,14 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
         return (ResultType) criteria.uniqueResult();
     }
 
+    @SuppressWarnings("unchecked")
+    protected List<T> asList(Query query) {
+    	return query.list();
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected List<Object[]> asTuplesList(Query query) {
+    	return query.list();
+    }
+    
 }

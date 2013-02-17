@@ -102,7 +102,7 @@ WhatsNextEntryDAO {
         
         Query q = getCurrentSession().createQuery(hqlQuery);
 
-        List<?> returned = q.list();
+        List<?> returned = this.asList(q);
         
         Map<User, List<Task>> returnValue = new HashMap<User, List<Task>>(returned.size()); 
 

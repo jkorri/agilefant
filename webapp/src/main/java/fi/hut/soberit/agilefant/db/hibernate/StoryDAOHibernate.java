@@ -182,7 +182,7 @@ public class StoryDAOHibernate extends GenericDAOHibernate<Story> implements
         query.setParameter("userId", userId);
         query.setParameter("now", new DateTime());
         query.setParameter("backlogType", "Iteration");
-        return query.list();
+        return this.asList(query);
     }
     
     public List<Story> searchByName(String name) {

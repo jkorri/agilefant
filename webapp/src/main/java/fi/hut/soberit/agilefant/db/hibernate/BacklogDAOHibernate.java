@@ -39,7 +39,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
     @SuppressWarnings("unchecked")
     public List<Object[]> getResponsiblesByBacklog(Backlog backlog) {
         String hql = "from Story as story left outer join story.responsibles as resp WHERE story.backlog = ?";
-        return (List<Object[]>) this.getCurrentSession().createQuery(hql).setEntity(0, backlog).list();
+        return this.asTuplesList(this.getCurrentSession().createQuery(hql).setEntity(0, backlog));
     }
 
     public int calculateStoryPointSum(int iterationId) {
