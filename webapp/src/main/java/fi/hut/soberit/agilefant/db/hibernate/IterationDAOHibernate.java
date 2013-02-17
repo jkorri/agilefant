@@ -271,7 +271,7 @@ public class IterationDAOHibernate extends GenericDAOHibernate<Iteration>
         crit.add(Restrictions.idEq(iterationId));
 
         crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        return (Iteration) crit.uniqueResult();
+        return this.uniqueResult(crit);
     }
 
     public Map<Integer, StoryMetrics> calculateIterationDirectStoryMetrics(

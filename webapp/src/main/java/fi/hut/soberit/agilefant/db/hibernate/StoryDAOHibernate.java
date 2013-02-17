@@ -47,7 +47,7 @@ public class StoryDAOHibernate extends GenericDAOHibernate<Story> implements
                 );
         criteria.add(Restrictions.eq("story.id", storyId));
         criteria.add(Restrictions.ne("state", TaskState.DEFERRED));
-        Object[] result = (Object[])criteria.uniqueResult();
+        Object[] result = (Object[])this.uniqueResult(criteria);
         if (result[0] != null) {
             metrics.setOriginalEstimate((Long)result[0]);
         }
@@ -63,7 +63,7 @@ public class StoryDAOHibernate extends GenericDAOHibernate<Story> implements
         criteria.add(Restrictions.isNotNull("storyPoints"));
         criteria.add(Restrictions.ne("state", StoryState.DEFERRED));
         criteria.setProjection(Projections.sum("storyPoints"));
-        Object result = criteria.uniqueResult();
+        Object result = this.uniqueResult(criteria);
         if (result == null) {
             return 0;
         }
@@ -76,7 +76,7 @@ public class StoryDAOHibernate extends GenericDAOHibernate<Story> implements
         criteria.add(Restrictions.isNotNull("storyValue"));
         criteria.add(Restrictions.not(Restrictions.eq("state", StoryState.DEFERRED)));
         criteria.setProjection(Projections.sum("storyValue"));
-        Object result = criteria.uniqueResult();
+        Object result = this.uniqueResult(criteria);
         if (result == null) {
             return 0;
         }
@@ -90,7 +90,7 @@ public class StoryDAOHibernate extends GenericDAOHibernate<Story> implements
         criteria.add(Restrictions.not(Restrictions.eq("state", StoryState.DEFERRED)));
         criteria.add(Restrictions.eq("state", StoryState.DONE));
         criteria.setProjection(Projections.sum("storyValue"));
-        Object result = criteria.uniqueResult();
+        Object result = this.uniqueResult(criteria);
         if (result == null) {
             return 0;
         }

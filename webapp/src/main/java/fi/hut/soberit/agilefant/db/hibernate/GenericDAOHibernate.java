@@ -72,9 +72,8 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
     }
     
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public Collection<T> getAll() {
-    	return this.createCriteria(this.getPersistentClass()).list();
+    	return this.asList(this.createCriteria(this.getPersistentClass()));
     }
     
     /** {@inheritDoc} */
@@ -134,13 +133,13 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
     public int count() {
     	Criteria criteria = this.createCriteria(this.getPersistentClass());
     	criteria.setProjection(Projections.rowCount());
-    	return ((Long)criteria.uniqueResult()).intValue();
+    	return ((Long)this.uniqueResult(criteria)).intValue();
     }
 
     public boolean exists(int id) {
     	Criteria criteria = this.createCriteria(this.getPersistentClass());
         criteria.add(Restrictions.idEq(id)).setProjection(Projections.rowCount());
-        return ((Long)criteria.uniqueResult()).intValue() > 0;
+        return ((Long)this.uniqueResult(criteria)).intValue() > 0;
     }
 
     public Session getCurrentSession() {
@@ -149,7 +148,7 @@ public abstract class GenericDAOHibernate<T> implements GenericDAO<T> {
 
     @SuppressWarnings("unchecked")
     protected <ResultType> Collection<ResultType> asCollection(Criteria criteria) {
-        Collection<ResultType> list = criteria.list();
+        Collection<ResultType> list = this.asList(criteria);
         if (list == null) {
             return Collections.EMPTY_LIST;
         }

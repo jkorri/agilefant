@@ -21,21 +21,20 @@ public class SettingDAOHibernate extends GenericDAOHibernate<Setting> implements
         /**
          * {@inheritDoc}
          */
-        @SuppressWarnings("unchecked")
         public Setting getByName(String name) {
         	Criteria criteria = this.createCriteria(this.getPersistentClass());
         	criteria.add(Restrictions.eq("name", name));
-        	return super.getFirst(criteria.list());
+        	List<Setting> list = this.asList(criteria); 
+        	return super.getFirst(list);
         }
        
         /**
          * {@inheritDoc}
          */
-        @SuppressWarnings("unchecked")
         public List<Setting> getAllOrderByName(){
         	Criteria criteria = this.createCriteria(this.getPersistentClass());
         	criteria.addOrder(Order.asc("name"));
-        	return criteria.list();
+        	return this.asList(criteria);
         }
 
 		@Override

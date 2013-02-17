@@ -39,7 +39,7 @@ public class IterationHistoryEntryDAOHibernate extends
         }
         crit.addOrder(Order.desc("timestamp"));
         crit.add(Restrictions.eq("iteration.id", iterationId));
-        return (IterationHistoryEntry) crit.uniqueResult();
+        return (IterationHistoryEntry) this.uniqueResult(crit);
     }
 
     public IterationHistoryEntry retrieveLatest(int iterationId) {
@@ -68,7 +68,7 @@ public class IterationHistoryEntryDAOHibernate extends
         crit.setProjection(Projections.projectionList().add(
                 Projections.sum("effortLeft")).add(
                 Projections.sum("originalEstimate")));
-        Object[] results = (Object[]) crit.uniqueResult();
+        Object[] results = (Object[]) this.uniqueResult(crit);
         
         return parseResultToPair(results);        
     }
@@ -88,7 +88,7 @@ public class IterationHistoryEntryDAOHibernate extends
         crit = crit.createCriteria("iteration");
         crit.add(Restrictions.idEq(iterationId));
         
-        Object[] results = (Object[]) crit.uniqueResult();
+        Object[] results = (Object[]) this.uniqueResult(crit);
         
         return parseResultToPair(results);
     }

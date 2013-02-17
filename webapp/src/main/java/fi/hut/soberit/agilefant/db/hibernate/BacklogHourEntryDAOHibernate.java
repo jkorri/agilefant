@@ -22,7 +22,7 @@ public class BacklogHourEntryDAOHibernate extends GenericDAOHibernate<BacklogHou
     public List<BacklogHourEntry> retrieveByBacklog(Backlog target) {
     	Criteria criteria = this.createCriteria(this.getPersistentClass());
     	criteria.add(Restrictions.eq("backlog", target));
-    	return criteria.list();
+    	return this.asList(criteria);
     }
 
 }

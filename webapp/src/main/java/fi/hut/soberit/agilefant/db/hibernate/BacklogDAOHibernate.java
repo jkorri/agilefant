@@ -33,7 +33,7 @@ public class BacklogDAOHibernate extends GenericDAOHibernate<Backlog> implements
         criteria.add(Restrictions.idEq(backlog.getId()));
         criteria.createCriteria("children");
         criteria.setProjection(Projections.rowCount());
-        return ((Long) criteria.list().get(0)).intValue();
+        return ((Long)this.asList(criteria).get(0)).intValue();
     }
 
     @SuppressWarnings("unchecked")

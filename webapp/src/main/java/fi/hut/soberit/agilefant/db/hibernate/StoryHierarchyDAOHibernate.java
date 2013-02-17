@@ -93,8 +93,8 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
                 Projections.sum("storyPoints")));
         iterationCrit.setProjection(Projections.projectionList().add(
                 Projections.sum("storyPoints")));
-        return sum((Long) projectCrit.uniqueResult(),
-                (Long) iterationCrit.uniqueResult());
+        return sum((Long) this.uniqueResult(projectCrit),
+                (Long) this.uniqueResult(iterationCrit));
     }
 
     /**
@@ -110,7 +110,7 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
         iterationCrit.setProjection(Projections.projectionList().add(
                 Projections.sum("storyPoints")));
         return sum(0L,
-                (Long) iterationCrit.uniqueResult());
+                (Long) this.uniqueResult(iterationCrit));
     }
     
     /**
@@ -126,8 +126,8 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
                 Projections.sum("storyPoints")));
         projectCrit.add(Restrictions.eq("state", StoryState.DONE));
         iterationCrit.add(Restrictions.eq("state", StoryState.DONE));
-        return sum((Long) projectCrit.uniqueResult(),
-                (Long) iterationCrit.uniqueResult());
+        return sum((Long) this.uniqueResult(projectCrit),
+                (Long) this.uniqueResult(iterationCrit));
     }
 
     /**
@@ -141,7 +141,7 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
         iterationCrit.add(Restrictions.eq("state", StoryState.DONE));
         iterationCrit.add(Restrictions.isNotNull("storyPoints"));
         iterationCrit.add(Restrictions.eq("iteration", iteration));
-        Long result = (Long) iterationCrit.uniqueResult();
+        Long result = (Long) this.uniqueResult(iterationCrit);
         return result == null ? 0 : result;
     }
     
@@ -229,8 +229,8 @@ public class StoryHierarchyDAOHibernate extends GenericDAOHibernate<Story>
                 Projections.sum("storyPoints")));
         standaloneIterationCrit.setProjection(Projections.projectionList().add(
                 Projections.sum("storyPoints")));
-        long sum = sum((Long) projectCrit.uniqueResult(), (Long) iterationCrit.uniqueResult());
-        return sum((Long) standaloneIterationCrit.uniqueResult(), sum);
+        long sum = sum((Long) this.uniqueResult(projectCrit), (Long) this.uniqueResult(iterationCrit));
+        return sum((Long) this.uniqueResult(standaloneIterationCrit), sum);
     }
 
     /** {@inheritDoc} */

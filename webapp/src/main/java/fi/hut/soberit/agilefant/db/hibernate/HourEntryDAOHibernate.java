@@ -37,7 +37,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
         crit.createCriteria("user").add(Restrictions.idEq(userId));
         crit.add(Restrictions.between("date", startDate, endDate));
         crit.setProjection(Projections.sum("minutesSpent"));
-        Long result = (Long) crit.uniqueResult();
+        Long result = (Long) this.uniqueResult(crit);
         if (result == null)
             return 0;
         return result;
@@ -51,7 +51,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
             crit = crit.createCriteria("task");
         crit = crit.createCriteria("story").add(Restrictions.idEq(storyId))
                 .add(Restrictions.ne("state", TaskState.DEFERRED));
-        Long result = (Long) crit.uniqueResult();
+        Long result = (Long) this.uniqueResult(crit);
 
         if (result == null)
             return 0;
@@ -70,7 +70,7 @@ public class HourEntryDAOHibernate extends GenericDAOHibernate<HourEntry>
         taskCrit.add(Restrictions.isNull("story"));
         taskCrit.createCriteria("iteration")
                 .add(Restrictions.idEq(iterationId));
-        Long result = (Long) crit.uniqueResult();
+        Long result = (Long) this.uniqueResult(crit);
         if (result == null)
             return 0;
         return result;

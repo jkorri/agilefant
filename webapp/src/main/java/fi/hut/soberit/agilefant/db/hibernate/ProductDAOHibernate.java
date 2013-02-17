@@ -30,11 +30,10 @@ public class ProductDAOHibernate extends GenericDAOHibernate<Product> implements
         super(Product.class);
     }
 
-    @SuppressWarnings("unchecked")
     public Collection<Product> getAllOrderByName() {
     	Criteria criteria = this.createCriteria(this.getPersistentClass());
     	criteria.addOrder(Order.asc("name"));
-    	return criteria.list();    	
+    	return this.asList(criteria);    	
     }
     
     public List<Product> retrieveBacklogTree() {

@@ -18,11 +18,10 @@ public class TaskHourEntryDAOHibernate extends GenericDAOHibernate<TaskHourEntry
         super(TaskHourEntry.class);
     }
     
-    @SuppressWarnings("unchecked")
     public List<TaskHourEntry> retrieveByTask(Task target) {
     	Criteria criteria = this.createCriteria(this.getPersistentClass());
     	criteria.add(Restrictions.eq("task", target));
-    	return criteria.list();
+    	return this.asList(criteria);
     }
 
 }
